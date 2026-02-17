@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Techo — Powered by Engravz</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1>Techo</h1>
+        <p class="subtitle">Powered by Engravz</p>
+      </div>
+      <nav class="app-nav">
+        <button class="nav-button active" data-page="dashboard">Dashboard</button>
+        <button class="nav-button" data-page="inventory">Inventory</button>
+        <button class="nav-button" data-page="billing">Billing</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="dashboard" class="page active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Total Stock Units</h3>
+            <p id="stat-total-stock">0</p>
+            <span class="muted">All quantities combined</span>
+          </div>
+          <div class="stat-card">
+            <h3>Items in Inventory</h3>
+            <p id="stat-item-count">0</p>
+            <span class="muted">Distinct items</span>
+          </div>
+          <div class="stat-card">
+            <h3>Today’s Sales</h3>
+            <p id="stat-today-sales">₹0</p>
+            <span class="muted">Revenue generated today</span>
+          </div>
+          <div class="stat-card">
+            <h3>Bills Today</h3>
+            <p id="stat-bills-today">0</p>
+            <span class="muted">Total bills created</span>
+          </div>
+          <div class="stat-card highlight">
+            <h3>Low Stock Alerts</h3>
+            <p id="stat-low-stock">0</p>
+            <span class="muted">Items below threshold</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Recent Bills</h2>
+            <button class="ghost" id="quick-new-bill">Create New Bill</button>
+          </div>
+          <div class="table" id="recent-bills"></div>
+        </div>
+      </section>
+
+      <section id="inventory" class="page">
+        <div class="inventory-layout">
+          <div class="panel">
+            <h2>Create Category</h2>
+            <form id="category-form" class="form-grid">
+              <label>
+                Category name
+                <input type="text" id="category-name" placeholder="e.g. Electronics" required />
+              </label>
+              <button type="submit" class="primary">Create Category</button>
+            </form>
+            <div class="divider"></div>
+            <h2>Add Item in Category</h2>
+            <form id="category-item-form" class="form-grid">
+              <label>
+                Select category
+                <select id="item-category" required></select>
+              </label>
+              <label>
+                Item name
+                <input type="text" id="item-name" placeholder="e.g. Earphones" required />
+              </label>
+              <label>
+                Price (₹)
+                <input type="number" id="item-price" min="0" step="0.01" required />
+              </label>
+              <label>
+                Quantity
+                <input type="number" id="item-quantity" min="0" step="1" required />
+              </label>
+              <button type="submit" class="primary">Add Item</button>
+            </form>
+            <div class="divider"></div>
+            <h2>Add Category-less Item</h2>
+            <form id="uncategorized-form" class="form-grid">
+              <label>
+                Item name
+                <input type="text" id="uncat-name" placeholder="e.g. Gift wrap" required />
+              </label>
+              <label>
+                Price (₹)
+                <input type="number" id="uncat-price" min="0" step="0.01" required />
+              </label>
+              <label>
+                Quantity
+                <input type="number" id="uncat-quantity" min="0" step="1" required />
+              </label>
+              <button type="submit" class="primary">Add Item</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Inventory List</h2>
+              <div class="pill">Low stock threshold: 5</div>
+            </div>
+            <div id="inventory-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="billing" class="page">
+        <div class="billing-layout">
+          <div class="panel">
+            <h2>Create Bill</h2>
+            <form id="bill-item-form" class="form-grid">
+              <label>
+                Category
+                <select id="bill-category"></select>
+              </label>
+              <label>
+                Item
+                <select id="bill-item"></select>
+              </label>
+              <label>
+                Price (₹)
+                <input type="text" id="bill-price" readonly />
+              </label>
+              <label>
+                Quantity
+                <input type="number" id="bill-quantity" min="1" step="1" value="1" required />
+              </label>
+              <button type="submit" class="primary">Add to Bill</button>
+            </form>
+            <div class="divider"></div>
+            <form id="bill-meta-form" class="form-grid">
+              <label>
+                Customer name
+                <input type="text" id="bill-customer" placeholder="Optional" />
+              </label>
+              <label>
+                WhatsApp number
+                <input type="tel" id="bill-whatsapp" placeholder="+91XXXXXXXXXX" />
+              </label>
+              <label>
+                Notes
+                <input type="text" id="bill-notes" placeholder="Optional" />
+              </label>
+            </form>
+            <div class="bill-actions">
+              <button class="secondary" id="print-bill">Print Bill</button>
+              <button class="secondary" id="send-whatsapp">Send via WhatsApp</button>
+              <button class="primary" id="finalize-bill">Save Bill</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Bill Summary</h2>
+              <span id="bill-number" class="pill">Bill #0001</span>
+            </div>
+            <div id="bill-summary"></div>
+            <div class="total-row">
+              <span>Total</span>
+              <strong id="bill-total">₹0</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="print-area" class="print-area"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
